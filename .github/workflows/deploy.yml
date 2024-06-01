@@ -1,6 +1,13 @@
- name: CI/CD Pipeline
+name: CI/CD Pipeline
 
-on: [push]
+# Trigger the workflow on push or pull request to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
