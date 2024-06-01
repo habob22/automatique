@@ -1,13 +1,6 @@
 name: CI/CD Pipeline
 
-# Trigger the workflow on push or pull request to the main branch
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push]
 
 jobs:
   build:
@@ -30,4 +23,5 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/your-image-name:latest
+        tags: habib7/automatic:latest
+
