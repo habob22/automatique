@@ -11,7 +11,7 @@ import paramiko
 model = load_model('models/worst_normalised9959.h5')
 
 def parse_file(sftp, remote_file_path, last_position):
-    """Parse the log file to extract packet counts, version, and rank."""
+    
     counts = {'DIS': 0, 'DIO': 0, 'DAO': 0, 'DATA': 0}
     versions = set()
     ranks = set()
