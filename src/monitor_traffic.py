@@ -69,7 +69,7 @@ def predict_with_model(model, features):
         return "Attaque"
 
 # Remote connection details
-hostname = '192.168.213.141'
+hostname = '192.168.8.141'
 port = 22
 username = 'ubuntu'
 password = 'ubuntu'
