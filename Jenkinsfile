@@ -26,7 +26,12 @@ pipeline {
         stage('Run Docker container') {
             steps {
                 script {
-                    docker.image('habib7/automatic:latest').inside { // Utilisateur Docker Hub et nom de l'image
+                    // Créer un répertoire temporaire valide pour Docker
+                    def tempDir = pwd(tmp: true)
+                    echo "Temp directory: ${tempDir}"
+
+                    // Exécuter le conteneur Docker avec le répertoire temporaire comme chemin de travail
+                    docker.image('habib7/automatic:latest').inside("-v ${tempDir}:${tempDir} -w ${tempDir}") {
                         sh 'python3.8 src/monitor_traffic.py'
                     }
                 }
