@@ -31,7 +31,7 @@ pipeline {
                     echo "Temp directory: ${tempDir}"
 
                     // Exécuter le conteneur Docker avec le répertoire temporaire comme chemin de travail
-                    docker.image('habib7/automatic:latest').inside("-v ${tempDir}:${tempDir} -w ${tempDir}") {
+                    docker.image('habib7/automatic:latest').inside("-v ${tempDir.replaceAll('\\\\', '/')}:/workspace -w /workspace") {
                         sh 'python3.8 src/monitor_traffic.py'
                     }
                 }
