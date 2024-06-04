@@ -64,7 +64,7 @@ def predict_with_model(model, features):
 
     # Interpret the predicted class
     if binary_prediction == 0:
-        return "Pas d'attaque helooooooooooooo"
+        return "Pas d'attaque helooooooooooo"
     else:
         return "Attaque helooooooooooo"
 
