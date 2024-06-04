@@ -1,6 +1,2 @@
  
 numpy
-pandas
-tensorflow
-scikit-learn
-paramiko
