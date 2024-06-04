@@ -3,12 +3,13 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
+        GITHUB_CREDENTIALS = credentials('github-credentials') // Ajoutez cette ligne pour utiliser les informations d'identification GitHub
     }
 
     stages {
         stage('Clone repository') {
             steps {
-                git 'https://github.com/habob22/automatique.git' // Utilisateur GitHub et nom du dépôt
+                git branch: 'main', url: 'https://github.com/habob22/automatique.git', credentialsId: 'GITHUB_CREDENTIALS' // Ajout de la branche et des informations d'identification
             }
         }
 
@@ -31,5 +32,9 @@ pipeline {
                 }
             }
         }
+    }
+
+    triggers {
+        pollSCM('H/1 * * * *') // Ajout de la configuration pour le polling SCM
     }
 }
