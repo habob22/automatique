@@ -21,9 +21,9 @@ pipeline {
                             bat """
                             echo %DOCKERHUB_PASSWORD% | docker login -u %DOCKERHUB_USERNAME% --password-stdin
                             docker pull habib7/automatic:latest
-                            docker pull your_dockerhub_username/bandit_image:latest
-                            docker pull your_dockerhub_username/flake8_image:latest
-                            docker pull your_dockerhub_username/trivy_image:latest
+                            docker pull habib7/bandit_image:latest
+                            docker pull habib7/flake8_image:latest
+                            docker pull habib7/trivy_image:latest
                             """
                         }
                     }
@@ -35,7 +35,7 @@ pipeline {
             steps {
                 script {
                     bat """
-                    docker run -d --name bandit_container -v %CD%:/app your_dockerhub_username/bandit_image:latest bandit -r /app/src -f json -o /app/bandit_report.json
+                    docker run -d --name bandit_container -v %CD%:/app habib7/bandit_image:latest bandit -r /app/src -f json -o /app/bandit_report.json
                     """
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
             steps {
                 script {
                     bat """
-                    docker run -d --name flake8_container -v %CD%:/app your_dockerhub_username/flake8_image:latest flake8 /app/src --format=json --output-file=/app/flake8_report.json
+                    docker run -d --name flake8_container -v %CD%:/app habib7/flake8_image:latest flake8 /app/src --format=json --output-file=/app/flake8_report.json
                     """
                 }
             }
@@ -55,7 +55,7 @@ pipeline {
             steps {
                 script {
                     bat """
-                    docker run -d --name trivy_container -v /var/run/docker.sock:/var/run/docker.sock -v %CD%:/app your_dockerhub_username/trivy_image:latest image --format json -o /app/trivy_report.json habib7/automatic:latest
+                    docker run -d --name trivy_container -v /var/run/docker.sock:/var/run/docker.sock -v %CD%:/app habib7/trivy_image:latest image --format json -o /app/trivy_report.json habib7/automatic:latest
                     """
                 }
             }
