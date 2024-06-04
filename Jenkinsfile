@@ -36,7 +36,7 @@ pipeline {
 
                     // Exécuter le conteneur Docker avec des commandes batch explicites
                     bat """
-                    docker run -d --name automatic_container -v ${tempDir}:/workspace -w /workspace habib7/automatic:latest python3.8 src/monitor_traffic.py
+                    docker run -d --name automatic_container -v "${tempDir}:/workspace" -w /workspace habib7/automatic:latest python3.8 src/monitor_traffic.py
                     """
                 }
             }
