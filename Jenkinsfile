@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         GITHUB_CREDENTIALS = credentials('github-credentials')
-        SONARQUBE_SCANNER_HOME = tool('sonar-scanner')
+        
 
     }
 
@@ -15,27 +15,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    echo "Using SonarQube Scanner located at: ${env.SONARQUBE_SCANNER_HOME}"
-                }
-                withSonarQubeEnv('sonar') {
-                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
-                        bat """
-                        set PATH=%PATH%;${env.SONARQUBE_SCANNER_HOME}\\bin
-                        sonar-scanner \
-                            -Dsonar.projectKey=automatique \
-                            -Dsonar.projectName=Automatique \
-                            -Dsonar.sources=. \
-                            -Dsonar.inclusions=src/**/* \
-                            -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=${env.SONARQUBE_TOKEN}
-                        """
-                    }
-                }
-            }
-        }
 
         stage('Pull Docker image') {
             steps {
