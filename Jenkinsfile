@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    tools {
+        sonarQubeScanner 'sonar-scanner'
+    }
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         GITHUB_CREDENTIALS = credentials('github-credentials')
@@ -17,15 +19,11 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                // Ensure environment for SonarQube is correctly set
                 script {
                     echo "Using SonarQube Scanner located at: ${env.SONARQUBE_SCANNER_HOME}"
                 }
-                
-                // Execute SonarQube analysis
                 withSonarQubeEnv('sonar') {
-                    withCredentials([string(credentialsId: 'sonarqubee-token', variable: 'SONARQUBE_TOKEN')]) {
-                        // Running SonarQube Scanner
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
                         bat """
                         set PATH=%PATH%;${env.SONARQUBE_SCANNER_HOME}\\bin
                         sonar-scanner \
