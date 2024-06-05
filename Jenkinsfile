@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         GITHUB_CREDENTIALS = credentials('github-credentials')
-        
+        SONARQUBE_TOKEN = credentials('sonarqube-token')
 
     }
 
@@ -14,6 +14,24 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/habob22/automatique.git', credentialsId: 'github-credentials'
             }
         }
+    stage('SonarQube Analysis') {
+            steps {
+                // The withSonarQubeEnv wrapper is used to integrate with the configured SonarQube environment
+                withSonarQubeEnv('sonar') {
+                    script {
+                        // Execute the SonarQube scanner targeting only the specific Python file
+                        bat """
+                        sonar-scanner \\
+                        -Dsonar.projectKey=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 \\
+                        -Dsonar.sources=. \\
+                        -Dsonar.inclusions=src/monitor_traffic.py \\
+                        -Dsonar.host.url=http://localhost:9000 \\
+                        -Dsonar.login=${env.SONARQUBE_TOKEN}
+                        """
+                    }
+                }
+            }
+        }    
 
 
         stage('Pull Docker image') {
