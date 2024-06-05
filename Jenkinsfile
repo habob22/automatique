@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         GITHUB_CREDENTIALS = credentials('github-credentials')
-        SCANNER_HOME= tool 'sonar-scanner'
+        SONARQUBE_SCANNER_HOME = tool('sonar-scanner')
 
     }
 
@@ -20,7 +20,7 @@ pipeline {
                 withSonarQubeEnv('sonar') {
                     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
                         bat """
-                        ${env.SCANNER_HOME}\\bin\\sonar-scanner.bat \
+                        ${env.SONARQUBE_SCANNER_HOME}\\bin\\sonar-scanner.bat \
                             -Dsonar.projectKey=automatique \
                             -Dsonar.projectName=automatique \
                             -Dsonar.sources=. \
