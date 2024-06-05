@@ -17,16 +17,24 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
+                // Ensure environment for SonarQube is correctly set
+                script {
+                    echo "Using SonarQube Scanner located at: ${env.SONARQUBE_SCANNER_HOME}"
+                }
+                
+                // Execute SonarQube analysis
                 withSonarQubeEnv('sonar') {
-                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'sonarqubee-token', variable: 'SONARQUBE_TOKEN')]) {
+                        // Running SonarQube Scanner
                         bat """
-                        ${env.SONARQUBE_SCANNER_HOME}\\bin\\sonar-scanner.bat \
+                        set PATH=%PATH%;${env.SONARQUBE_SCANNER_HOME}\\bin
+                        sonar-scanner \
                             -Dsonar.projectKey=automatique \
-                            -Dsonar.projectName=automatique \
+                            -Dsonar.projectName=Automatique \
                             -Dsonar.sources=. \
-                            -Dsonar.inclusions=src/monitor_traffic.py \
+                            -Dsonar.inclusions=src/**/* \
                             -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=%SONARQUBE_TOKEN%
+                            -Dsonar.login=${env.SONARQUBE_TOKEN}
                         """
                     }
                 }
