@@ -19,15 +19,15 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonar') {
                     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
-                        sh '''
-                        $SCANNER_HOME/bin/sonar-scanner \
+                        bat """
+                        ${env.SCANNER_HOME}\\bin\\sonar-scanner.bat \
                             -Dsonar.projectKey=automatique \
                             -Dsonar.projectName=automatique \
                             -Dsonar.sources=. \
                             -Dsonar.inclusions=src/monitor_traffic.py \
                             -Dsonar.host.url=http://localhost:9000 \
-                            -Dsonar.login=$SONARQUBE_TOKEN
-                        '''
+                            -Dsonar.login=%SONARQUBE_TOKEN%
+                        """
                     }
                 }
             }
