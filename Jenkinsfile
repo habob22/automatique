@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         GITHUB_CREDENTIALS = credentials('github-credentials')
-        SONARQUBE_TOKEN = credentials('sonarqube-token')
+        SCANNER_HOME= tool 'sonar-scanner'
 
     }
 
@@ -21,13 +21,11 @@ pipeline {
                     script {
                         // Execute the SonarQube scanner targeting only the specific Python file
                         bat """
-                        sonar-scanner \\
-                        -Dsonar.projectKey=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 \\
-                        -Dsonar.sources=. \\
-                        -Dsonar.inclusions=src/monitor_traffic.py \\
-                        -Dsonar.host.url=http://localhost:9000 \\
-                        -Dsonar.login=${env.SONARQUBE_TOKEN}
+                            $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=automatique -Dsonar.projectKey=automatique   -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 \
+                            -Dsonar.url=http://localhost:9000 \
+                            -Dsonar.java.binaries=. 
                         """
+                        
                     }
                 }
             }
