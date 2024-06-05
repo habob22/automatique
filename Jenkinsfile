@@ -23,7 +23,8 @@ pipeline {
                         $SCANNER_HOME/bin/sonar-scanner \
                             -Dsonar.projectKey=automatique \
                             -Dsonar.projectName=automatique \
-                            -Dsonar.java.binaries=. \
+                            -Dsonar.sources=. \
+                            -Dsonar.inclusions=src/monitor_traffic.py \
                             -Dsonar.host.url=http://localhost:9000 \
                             -Dsonar.login=$SONARQUBE_TOKEN
                         '''
