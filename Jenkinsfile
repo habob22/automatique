@@ -15,13 +15,19 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analsyis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.url=http://localhost:9000/ -Dsonar.login=squ_73d2d635d79f65e4511e6ac5eb4782ffdfc572dd -Dsonar.projectName=automatique \
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
+                        sh '''
+                        $SCANNER_HOME/bin/sonar-scanner \
+                            -Dsonar.projectKey=automatique \
+                            -Dsonar.projectName=automatique \
                             -Dsonar.java.binaries=. \
-                            -Dsonar.projectKey=automatique
-                    '''
+                            -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.login=$SONARQUBE_TOKEN
+                        '''
+                    }
                 }
             }
         }
