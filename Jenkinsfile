@@ -16,20 +16,17 @@ pipeline {
         }
     stage('SonarQube Analysis') {
             steps {
-                // The withSonarQubeEnv wrapper is used to integrate with the configured SonarQube environment
                 withSonarQubeEnv('sonar') {
                     script {
-                        // Execute the SonarQube scanner targeting only the specific Python file
                         bat """
-                            $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=automatique -Dsonar.projectKey=automatique   -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 \
+                            %SCANNER_HOME%/bin/sonar-scanner -Dsonar.projectName=automatique -Dsonar.projectKey=automatique -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 \
                             -Dsonar.url=http://localhost:9000 \
-                            -Dsonar.java.binaries=. 
+                            -Dsonar.java.binaries=.
                         """
-                        
                     }
                 }
             }
-        }    
+        }   
 
 
         stage('Pull Docker image') {
