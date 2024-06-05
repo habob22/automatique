@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         GITHUB_CREDENTIALS = credentials('github-credentials')
-        SCANNER_HOME= tool 'sonar-scanner'
+       
 
     }
 
@@ -16,17 +16,19 @@ pipeline {
         }
     stage('SonarQube Analysis') {
             steps {
+                // Ensure SonarQube environment is configured in Jenkins's "Configure System" under "SonarQube servers"
                 withSonarQubeEnv('sonar') {
                     script {
+                        // Replace 'sonar.login' with your SonarQube authentication token
                         bat """
-                            %SCANNER_HOME%/bin/sonar-scanner -Dsonar.projectName=automatique -Dsonar.projectKey=automatique -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 \
-                            -Dsonar.url=http://localhost:9000 \
-                            -Dsonar.java.binaries=.
+                            sonar-scanner -Dsonar.projectName=automatique -Dsonar.projectKey=automatique -Dsonar.host.url=http://localhost:9000 \
+                            -Dsonar.sources=src \
+                            -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478
                         """
                     }
                 }
             }
-        }   
+        }  
 
 
         stage('Pull Docker image') {
