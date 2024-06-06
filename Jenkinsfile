@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials')
         GITHUB_CREDENTIALS = credentials('github-credentials')
-       
+        SANNER_HOME= tool 'sonar-scanner'
 
     }
 
@@ -16,16 +16,19 @@ pipeline {
         }
    
         stage('SonarQube analysis') {
-    steps {
-        script {
-            // Assurez-vous que votre image Docker avec sonar-scanner est accessible
-            docker.image('sonarqube:lts-community').inside("-w /workspace") {
+   
+        steps {
+            
+            
                 // La commande pour exécuter sonar-scanner
-                sh 'sonar-scanner -Dsonar.projectKey=sonar -Dsonar.sources=src -Dsonar.host.url=http:http://localhost:9000 -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478'
+                sh '''  $SANNER_HOME/bin/sonar-scanner -Dsonar.url=http:http://localhost:9000 -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 -Dsonar.projectName=sonar \
+                   -Dsonar.java.binaries=. \
+                   -Dsonar.projectKey=sonar \
+                   -Dsonar.sources=src  '''
             }
         }
-    }
-}
+    
+
 
 
 
