@@ -14,13 +14,19 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/habob22/automatique.git', credentialsId: 'github-credentials'
             }
         }
-    stage('SonarQube analysis') {
-            steps {
-                withSonarQubeEnv('sonar') {
-                    bat 'sonar-scanner -Dsonar.projectKey=sonar -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000/ -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478'
-                }
+   
+        stage('SonarQube analysis') {
+    steps {
+        script {
+            // Assurez-vous que votre image Docker avec sonar-scanner est accessible
+            docker.image('sonarqube:lts-community').inside {
+                // La commande pour exécuter sonar-scanner
+                sh 'sonar-scanner -Dsonar.projectKey=sonar -Dsonar.sources=src -Dsonar.host.url=http:http://localhost:9000 -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478'
             }
         }
+    }
+}
+
 
 
         stage('Pull Docker image') {
