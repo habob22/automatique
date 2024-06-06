@@ -16,7 +16,7 @@ pipeline {
         }
     stage('SonarQube analysis') {
             steps {
-                withSonarQubeEnv('Your_SonarQube_Server_Name') {
+                withSonarQubeEnv('sonar') {
                     bat 'sonar-scanner -Dsonar.projectKey=sonar -Dsonar.sources=src -Dsonar.host.url=http://localhost:9000/ -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478'
                 }
             }
