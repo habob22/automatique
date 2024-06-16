@@ -15,18 +15,7 @@ pipeline {
             }
         }
    
-        stage('SonarQube analysis') {
-   
-        steps {
-            
-            
-                // La commande pour exécuter sonar-scanner
-                sh '''  $SANNER_HOME/bin/sonar-scanner -Dsonar.url=http:http://localhost:9000 -Dsonar.login=squ_2cdfa144e8ec8544328468efcac01738ff0b4478 -Dsonar.projectName=sonar \
-                   -Dsonar.java.binaries=. \
-                   -Dsonar.projectKey=sonar \
-                    '''
-            }
-        }
+        
     
 
 
@@ -55,7 +44,7 @@ pipeline {
 
                     // Exécuter le conteneur Docker avec des commandes batch explicites
                     bat """
-                    docker run -d --name automatic_container -v "${tempDir}:/workspace" -w /workspace habib7/automatic:latest python3.8 src/monitor_traffic.py
+                    docker run -v shared_data -d --name automatic_container -v "${tempDir}:/workspace" -w /workspace habib7/automatic:latest python3.8 src/monitor_traffic.py
                     """
                 }
             }
