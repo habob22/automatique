@@ -64,9 +64,9 @@ def predict_with_model(model, features):
 
     # Interpret the predicted class
     if binary_prediction == 0:
-        return "Pas d'attaque helooooooooooo"
+        return "Pas d'attaque "
     else:
-        return "Attaque helooooooooooo"
+        return "Attaque "
 
 # Remote connection details
 hostname = '192.168.8.141'
