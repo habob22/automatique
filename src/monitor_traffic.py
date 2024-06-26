@@ -1,4 +1,3 @@
-
 import time
 import numpy as np
 import pandas as pd
@@ -6,12 +5,25 @@ import tensorflow as tf
 from tensorflow.keras.models import load_model
 from sklearn.preprocessing import normalize
 import paramiko
+import os
 
 # Load the trained binary classification model
 model = load_model('models/worst_normalised9959.h5')
 
+# Use an absolute path for the log file
+log_file_path = os.path.abspath('output_log.txt')
+
+# Open a log file to write print outputs
+log_file = open(log_file_path, 'a')
+
+def custom_print(*args, **kwargs):
+    """
+    Custom print function that writes to both the console and a log file.
+    """
+    print(*args, **kwargs)  # Print to console
+    print(*args, **kwargs, file=log_file, flush=True)  # Print to log file and flush immediately
+
 def parse_file(sftp, remote_file_path, last_position):
-    
     counts = {'DIS': 0, 'DIO': 0, 'DAO': 0, 'DATA': 0}
     versions = set()
     ranks = set()
@@ -91,16 +103,16 @@ try:
 
             # Display the results
             normalized_features = normalize([features], norm='l1')
-            print(f"Counts: {counts}")
-            print(f"Version: {features[0]}")
-            print(f"Rank: {features[1]}")
-            print(f"Normalized Features: {normalized_features}")
-            print(f"Sum of Normalized Features: {np.sum(normalized_features)}")
-            print(f"Prediction: {prediction}")
+            custom_print(f"Counts: {counts}")
+            custom_print(f"Version: {features[0]}")
+            custom_print(f"Rank: {features[1]}")
+            custom_print(f"Normalized Features: {normalized_features}")
+            custom_print(f"Sum of Normalized Features: {np.sum(normalized_features)}")
+            custom_print(f"Prediction: {prediction}")
 
         # Wait 60 seconds before reading the file again
         time.sleep(60)
 finally:
     sftp.close()
     ssh.close()
-
+    log_file.close()  # Ensure to close the log file at the end
